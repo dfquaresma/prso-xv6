@@ -158,7 +158,7 @@ static char* syscallnames[] = {
 [SYS_close]   "close",
 [SYS_getpriority]  "getpriority",
 [SYS_setpriority]  "setpriority",
-[SYS_getusage]    "sys_getusage",
+[SYS_getusage]    "getusage",
 };
 
 void
