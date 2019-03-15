@@ -103,6 +103,9 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+extern int sys_getpriority(void);
+extern int sys_setpriority(void);
+extern int sys_getusage(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -126,6 +129,9 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_getpriority] sys_getpriority,
+[SYS_setpriority] sys_setpriority,
+[SYS_getusage]    sys_getusage,
 };
 
 static char* syscallnames[] = {
@@ -150,6 +156,9 @@ static char* syscallnames[] = {
 [SYS_link]    "link",
 [SYS_mkdir]   "mkdir",
 [SYS_close]   "close",
+[SYS_getpriority]  "getpriority",
+[SYS_setpriority]  "setpriority",
+[SYS_getusage]    "sys_getusage",
 };
 
 void
