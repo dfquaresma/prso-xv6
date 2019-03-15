@@ -6,7 +6,12 @@
 int
 main(int argc, char *argv[])
 {
-  int oldprio = setpriority(atoi(argv[0]), atoi(argv[1]));
+  int pid = atoi(argv[0]);
+  int prio = atoi(argv[1]);
+
+  int oldprio = getpriority(pid);
+  setpriority(pid, prio);
+
   printf(1, "%d", oldprio);
   exit();
   return 0;
