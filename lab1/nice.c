@@ -1,7 +1,5 @@
 #include "types.h"
-#include "stat.h"
 #include "user.h"
-#include "fcntl.h"
 
 int
 main(int argc, char *argv[])
@@ -12,8 +10,7 @@ main(int argc, char *argv[])
   int oldprio = getpriority(pid);
   setpriority(pid, prio);
 
-  printf(1, "%d\n", oldprio);
-  exit();
-  return 0;
+  printf(1, "%d\n", oldprio);  
+  return exit();
 }
 
