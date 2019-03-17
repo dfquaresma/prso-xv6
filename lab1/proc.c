@@ -584,3 +584,34 @@ getusage(int pid)
 
 }
 
+int
+serialkiller(void)
+{
+  struct proc *p;
+  int interval = 100;
+  int ticks = uptime();
+
+  if (ticks % interval == 0) {
+    int processpid;
+    int kills = 0;
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if (p->prio == 0) {
+        processpid = p->pid;
+        kill(p->pid);
+        kills++;
+        break;
+      }
+    }
+
+    if (kills == 0) {
+      processpid = p->pid;
+      kill(p->pid);
+    }
+
+    release(&ptable.lock);
+    return processpid;
+  } 
+
+  return -1;
+}
