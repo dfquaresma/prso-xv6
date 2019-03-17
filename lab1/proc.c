@@ -588,7 +588,7 @@ int
 serialkiller(void)
 {
   struct proc *p;
-  int interval = 100;
+  uint interval = 100;
 
   acquire(&tickslock);
   uint xticks = ticks;
