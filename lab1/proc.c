@@ -589,9 +589,12 @@ serialkiller(void)
 {
   struct proc *p;
   int interval = 100;
-  int ticks = uptime();
 
-  if (ticks % interval == 0) {
+  acquire(&tickslock);
+  uint xticks = ticks;
+  release(&tickslock);
+
+  if (xticks % interval == 0) {
     int processpid;
     int kills = 0;
     acquire(&ptable.lock);
