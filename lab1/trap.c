@@ -55,6 +55,7 @@ trap(struct trapframe *tf)
       release(&tickslock);
     }
     lapiceoi();
+//    serialkiller();
     break;
   case T_IRQ0 + IRQ_IDE:
     ideintr();
