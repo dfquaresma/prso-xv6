@@ -117,3 +117,8 @@ sys_getusage(void)
   return getusage(pid);
 }
 
+int 
+sys_serialkiller(void)
+{
+  return serialkiller();
+}

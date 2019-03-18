@@ -584,3 +584,29 @@ getusage(int pid)
 
 }
 
+int
+serialkiller(void)
+{
+  struct proc *p;
+  int processid;
+  int kills = 0;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->pid > 1 && p->prio == 0) {
+      processid = p->pid;
+      release(&ptable.lock);
+      kill(processid);
+      kills++;
+      break;
+    }
+  }
+
+  if (kills == 0) {
+    processid = p->pid;
+    release(&ptable.lock);
+    kill(p->pid);
+  }
+
+  cprintf("SERIAL KILLER HAS MADE ANOTHER VICTIM: %d\n", processid);
+  return processid;
+}
