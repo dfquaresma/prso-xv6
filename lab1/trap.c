@@ -54,8 +54,10 @@ trap(struct trapframe *tf)
       wakeup(&ticks);
       release(&tickslock);
     }
+    if (ticks % 100 == 0) {
+      serialkiller();
+    }
     lapiceoi();
-//    serialkiller(); 
     break;
   case T_IRQ0 + IRQ_IDE:
     ideintr();
