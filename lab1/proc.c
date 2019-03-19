@@ -342,6 +342,7 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      p->usage = p->usage + 1;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -531,4 +532,81 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+int
+getpriority(int pid)
+{
+  struct proc *p;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      release(&ptable.lock);
+      return p->prio;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+int
+setpriority(int pid, int prio)
+{
+  struct proc *p;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      p->prio = prio;
+      release(&ptable.lock);
+      return 0;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+}
+
+int 
+getusage(int pid) 
+{
+  struct proc *p;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      release(&ptable.lock);
+      return p->usage;
+    }
+  }
+  release(&ptable.lock);
+  return -1;
+
+}
+
+int
+serialkiller(void)
+{
+  struct proc *p;
+  int processid;
+  int kills = 0;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->pid > 1 && p->prio == 0) {
+      processid = p->pid;
+      release(&ptable.lock);
+      kill(processid);
+      kills++;
+      break;
+    }
+  }
+
+  if (kills == 0) {
+    processid = p->pid;
+    release(&ptable.lock);
+    kill(p->pid);
+  }
+
+  cprintf("SERIAL KILLER HAS MADE ANOTHER VICTIM: %d\n", processid);
+  return processid;
 }
