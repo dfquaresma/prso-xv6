@@ -588,25 +588,21 @@ int
 serialkiller(void)
 {
   struct proc *p;
-  int processid;
-  int kills = 0;
+  int processid = -1;
+  int killed = 0;
   acquire(&ptable.lock);
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if (p->pid > 1 && p->prio == 0) {
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){    
+    if (p->killed != 1 && p->pid > 2) {
       processid = p->pid;
       release(&ptable.lock);
       kill(processid);
-      kills++;
+      killed = 1;
       break;
     }
   }
 
-  if (kills == 0) {
-    processid = p->pid;
-    release(&ptable.lock);
-    kill(p->pid);
-  }
-
-  cprintf("SERIAL KILLER HAS MADE ANOTHER VICTIM: %d\n", processid);
+  if (!killed) release(&ptable.lock); 
+  
+  cprintf("Process killed: %d\n", processid);
   return processid;
 }
