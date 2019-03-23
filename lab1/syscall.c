@@ -107,6 +107,7 @@ extern int sys_getpriority(void);
 extern int sys_setpriority(void);
 extern int sys_getusage(void);
 extern int sys_serialkiller(void);
+extern int sys_ps(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -134,6 +135,7 @@ static int (*syscalls[])(void) = {
 [SYS_setpriority]  sys_setpriority,
 [SYS_getusage]     sys_getusage,
 [SYS_serialkiller] sys_serialkiller,
+[SYS_ps] sys_ps,
 };
 
 /*static char* syscallnames[] = {
@@ -162,6 +164,7 @@ static int (*syscalls[])(void) = {
 [SYS_setpriority]  "setpriority",
 [SYS_getusage]     "getusage",
 [SYS_serialkiller] "serialkiller",
+[SYS_ps] "ps",
 };*/
 
 void
