@@ -122,3 +122,9 @@ sys_serialkiller(void)
 {
   return serialkiller();
 }
+
+void
+sys_ps(void)
+{
+  return ps();
+}
