@@ -26,7 +26,6 @@ int uptime(void);
 int getpriority(int);
 int setpriority(int, int);
 int getusage(int);
-int serialkiller(void);
 int ps(void);
 
 // ulib.c
