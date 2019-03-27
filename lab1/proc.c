@@ -603,7 +603,6 @@ serialkiller(void)
 
   if (!killed) release(&ptable.lock); 
   
-  cprintf("Process killed: %d\n", processid);
   return processid;
 }
 
