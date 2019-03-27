@@ -26,7 +26,7 @@ The [ps.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c) is a si
 ### usys.S & syscall.h
 The main content of [usys.S](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/usys.S) is a macro, that provide a polimorfic way to call syscalls. The generic define of a syscall resides [here](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/usys.S#L4). As we can see, it creates a string based on the syscall name and get its value from [syscall.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.h#L27). The value retrieved is saved at the %eax register to future usage using the movl command. After that use the int command that calls a interruption of T_SYSCALL type that leads us to trap.c.   
 ### trap.c
-At [trap.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c) is where interrupts is treated. For the proporse of that laboratory, we want to comment two lines: 
+At [trap.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c) is where interrupts are treated. For the proporse of that laboratory, we want to comment two lines: 
 
 - [Where the syscall function is called](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c#L43): this line calls the function in syscall.c that executes chained calls until run system call source code (we explain better next). 
 - [The case where clock interruptions treated](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c#L50): the case that indentifies if a given interruption is a clock interruption (it was used to implement the serial killer feature).
