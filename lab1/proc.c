@@ -571,17 +571,16 @@ int
 getusage(int pid) 
 {
   struct proc *p;
-
+  int ret = -1; 
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
-      release(&ptable.lock);
-      return p->usage;
+      ret = p->usage;
+      break;
     }
   }
   release(&ptable.lock);
-  return -1;
-
+  return ret;
 }
 
 int
