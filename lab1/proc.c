@@ -538,33 +538,37 @@ int
 getpriority(int pid)
 {
   struct proc *p;
-
+  int ret = -1;
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
-      release(&ptable.lock);
-      return p->prio;
+      ret = p->prio;
     }
   }
   release(&ptable.lock);
-  return -1;
+  return ret;
 }
 
 int
 setpriority(int pid, int prio)
 {
   struct proc *p;
-
+  int oldprio = -1;
+  
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
-      p->prio = prio;
-      release(&ptable.lock);
-      return 0;
+	  if (prio >= 0 && prio <=31){
+        oldprio = p->prio;
+        p->prio = prio;
+        break;
+	  }else{
+		p->prio = oldprio;
+	  } 
     }
   }
   release(&ptable.lock);
-  return -1;
+  return oldprio;
 }
 
 int 
