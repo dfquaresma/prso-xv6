@@ -1,1 +1,1 @@
-# Laboratório 1 - Chamadas ao sistema e interrupções
+# Laboratory 1 - System calls and interrupts
