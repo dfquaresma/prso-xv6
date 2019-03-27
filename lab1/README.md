@@ -16,7 +16,7 @@ The tasks were:
   - We had to insert code [where the clock interrupt is handled](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c#L54).
 
 Additionally, we created:
-- A program called [victims](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/victims.c), that do a number of forks call to fill Ptable with processes to be killed by Serialkiller.
+- A program called [victims](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/victims.c), that do a number of fork calls to fill Ptable with processes to be killed by Serialkiller.
 - A [ps](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c) program that prints all living processes.
 
 ## Syscall execution flow
