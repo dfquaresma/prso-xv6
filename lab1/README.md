@@ -18,3 +18,24 @@ The tasks were:
 Additionally, we created:
 - A program called [victims](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/victims.c), that do a number of forks call to fill Ptable with processes to be killed by Serialkiller.
 - A [ps](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c) program that prints all living processes.
+
+## Syscall execution flow
+To easily understand the implementation of an xv6 syscall, we'll explain why each file used were modified and what is its role. Let's begin our tour explaining our program that invokes ps command and walking through each file doing the same.
+### ps.c & user.h
+The [ps.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c) is a simple C program that only exists to [call the ps syscall](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c#L7). It [imports that code from user.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c#L2). The [user.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/user.h) is a file where the contract of functions that may be used for programers resides. We can see the ps function [here](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/user.h#L30)
+### usys.S & syscall.h
+The main content of [usys.S](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/usys.S) is a macro, that provide a polimorfic way to call syscalls. The generic define of a syscall resides [here](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/usys.S#L4). As we can see, it creates a string based on the syscall name and get its value from [syscall.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.h#L27). The value retrieved is save at the %eax register to future usage using the movl command. After that use the int command that calls a interruption of T_SYSCALL type that leads us to trap.c.   
+### trap.c
+At [trap.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c) is where interrupts is treated. For the proporse of that laboratory, we want to comment two lines: 
+
+- [Where the syscall function is called](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c#L43): this line calls the function in syscall.c that executes chained calls until run system call source code (we explain better next). 
+- [The case where clock interruptions treated](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/trap.c#L50): the case that indentifies if a given interruption is a clock interruption (it was used to implement the serial killer feature).
+
+### syscall.c
+The [syscall.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.c) remain the last treatment until execute the system call code. Ok, let's start looking at [syscall.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.c#L171). As we have already said, it is the function used in trap.c to invoked a system call. That function read the [value in %eax](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.c#L176) to [know what system call execute]((https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.c#L179)) and than it [retrieves and save the result](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.c#L179) of the [nonparametric function](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.c#L112) implemented in [sysproc.c (we choose ps as example)](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/sysproc.c#L127)
+
+### sysproc.c & proc.c
+At [sysproc.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/sysproc.c) we have nonparametric implementation of functions that finally invokes functions which executes the system call source code. These final functions are implemented in 
+[proc.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/proc.c) and here we can see [ps system call source code](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/proc.c#L611). 
+
+### [defs.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/defs.h)
