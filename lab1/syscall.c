@@ -106,7 +106,6 @@ extern int sys_uptime(void);
 extern int sys_getpriority(void);
 extern int sys_setpriority(void);
 extern int sys_getusage(void);
-extern int sys_serialkiller(void);
 extern int sys_ps(void);
 
 static int (*syscalls[])(void) = {
@@ -134,7 +133,6 @@ static int (*syscalls[])(void) = {
 [SYS_getpriority]  sys_getpriority,
 [SYS_setpriority]  sys_setpriority,
 [SYS_getusage]     sys_getusage,
-[SYS_serialkiller] sys_serialkiller,
 [SYS_ps] sys_ps,
 };
 
@@ -163,7 +161,6 @@ static int (*syscalls[])(void) = {
 [SYS_getpriority]  "getpriority",
 [SYS_setpriority]  "setpriority",
 [SYS_getusage]     "getusage",
-[SYS_serialkiller] "serialkiller",
 [SYS_ps] "ps",
 };*/
 
