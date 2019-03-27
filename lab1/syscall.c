@@ -166,9 +166,7 @@ static char* syscallsnames[] = {
 
 void
 syscall(void)
-{
-  int writeid = 16;
-  int readid = 5;
+{ 
   int num;
   struct proc *curproc = myproc();
 
@@ -178,7 +176,7 @@ syscall(void)
 
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {    
     curproc->tf->eax = syscallres;
-    if (num != writeid && num != readid) {
+    if (num != SYS_write && num != SYS_read) {
       cprintf("syscall: %s\nexit code: %d\n",
             syscallsnames[num], syscallres);      
     }    
