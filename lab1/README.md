@@ -3,7 +3,7 @@ In this lab, we practice the implementation of system calls and interrupts. The 
 
 The tasks were:
 - Print each system call when invoked.
-- Implement inicially two sistem calls
+- Implement inicially two system calls
   - Add system call [getpriority](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/proc.c#L538): to retrieve the priority of a process.
     - We had to update the process structure, adding a prio attribute.
   - Add system call [setpriority](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/proc.c#L554): to update the priority of a process.
