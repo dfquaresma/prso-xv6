@@ -1,5 +1,5 @@
 # Laboratory 1 - System calls and interrupts
-In that lab, we practice the implementation of system calls and interrupts. The purposes of it is to understand the system call execution flow and its implementation, how a process is scheduled to run and finally how interrupts works. 
+In this lab, we practice the implementation of system calls and interrupts. The purposes of it is to understand the system call execution flow and its implementation, how a process is scheduled to run and finally how interrupts works. 
 
 The tasks were:
 - Print each system call when invoked.
