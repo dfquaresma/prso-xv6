@@ -20,7 +20,7 @@ Additionally, we created:
 - A [ps](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c) program that prints all living processes.
 
 ## Syscall execution flow
-To easily understand the implementation of an xv6 syscall, we'll explain why each file used were modified and what is its role. Let's begin our tour explaining our program that invokes ps command and walking through each file doing the same.
+To easily understand the implementation of an xv6 syscall, we'll explain why each file used were modified and what is its role. Let's begin our tour explaining our program that invokes ps command and walks through each file doing the same.
 ### ps.c & user.h
 The [ps.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c) is a simple C program that only exists to [call the ps syscall](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c#L7). It [imports that code from user.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/ps.c#L2). The [user.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/user.h) is a file where the contract of functions that may be used for programers resides. We can see the ps function [here](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/user.h#L30)
 ### usys.S & syscall.h
