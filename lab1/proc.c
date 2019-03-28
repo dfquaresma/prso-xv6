@@ -614,12 +614,14 @@ ps(void)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){   
     if (p->pid != 0) {            
       cprintf("%d         "               
-      "%d       " 
-      " %dKB   "  
-      "%d         " 
-      "%d  \n", count++, p->pid, p->sz, p->prio, p->usage);
+      "%d       "           
+      "%d           " 
+      " %d        "
+      "  %dKB   "
+      "%s      \n", count++, p->pid, p->prio, p->usage, p->sz, p->name);
     }
   }
   release(&ptable.lock); 
   return;
 }
+
