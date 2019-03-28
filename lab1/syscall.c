@@ -166,7 +166,7 @@ static char* syscallsnames[] = {
 
 void
 syscall(void)
-{ 
+{
   int num;
   struct proc *curproc = myproc();
 
