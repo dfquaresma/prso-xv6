@@ -611,9 +611,16 @@ ps(void)
   int count = 0;
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){   
-    if (p->pid != 0) 
-      cprintf("Process %d has pid %d killed %d name %s prio %d usage %d\n", count++, p->pid, p->killed, p->name, p->prio, p->usage);
+    if (p->pid != 0) {            
+      cprintf("%d         "               
+      "%d       "           
+      "%d           " 
+      " %d        "
+      "  %dKB   "
+      "%s      \n", count++, p->pid, p->prio, p->usage, p->sz, p->name);
+    }
   }
   release(&ptable.lock); 
   return;
 }
+
