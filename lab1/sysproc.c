@@ -110,10 +110,10 @@ sys_setpriority(void)
   return setpriority(pid, prio);
 }
 
-int 
+int
 sys_getusage(void)
 {
-  int pid; 
+  int pid;
   argint(0, &pid);
   if(pid <= 0)
     return -1;
