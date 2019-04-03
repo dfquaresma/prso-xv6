@@ -22,4 +22,7 @@ Essencially, the scheduler aims choose a program to run.
   - TODO
 
 - Our policy of working:
-  - TODO
+  - All process will have an additional attribute called currprio.
+  - Periodically, all processes' currprio will be decremented by one.
+  - When currprio is zero and scheduler try to decrement, currprio returns to its original value.
+  
