@@ -18,6 +18,8 @@ Goal: Defining a new politics of scheduling processes on xv6 that works and deal
 
 Essencially, the scheduler aims choose a program to run. 
 
-- The current way that the xv6 works.
+- The current way that the xv6 works:
+  - TODO
 
-- Our policy of working.
+- Our policy of working:
+  - TODO
