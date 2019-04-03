@@ -1,10 +1,8 @@
-# Laboratory 3 - Scheduler
+# Lab 3 - Scheduler
 
-## Strategy to scheduler algorithm
+## Short description
 
-Defining a new politics of scheduling processes on xv6.
-
-### Points to consider
+Goal: Defining a new politics of scheduling processes on xv6 that works and deal with the points below.
 
 - Standard priority on init of each process. 
 
@@ -15,3 +13,11 @@ Defining a new politics of scheduling processes on xv6.
 - Should there exists some mecanism to deal with starvation. More details to this on the lab description. 
 
 - Pay attention to possible conflicts between the new scheduling policy and the 'nice' program.
+
+## Strategy of solution 
+
+Essencially, the scheduler aims choose a program to run. 
+
+- The current way that the xv6 works.
+
+- Our policy of working.
