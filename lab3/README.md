@@ -25,5 +25,5 @@ Essencially, the scheduler aims choose a program to run.
   - All process will have an additional attribute called currprio.
   - Periodically, all processes' currprio will be decremented by one.
   - When a process is executed, currprio returns to its original value.
-  If there no one process with zero priority, the highest priority existent in the process table will be subtracted from all processes.
-  
+  - The scheduler will select only process with zero currprio using Round Robin.
+  - If there no process with zero priority, the highest priority existent in the process table will be subtracted from all processes.
