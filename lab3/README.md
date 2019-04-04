@@ -26,6 +26,5 @@ Essencially, the scheduler aims choose a program to run.
   - Periodically, all processes' currprio will be decremented by one.
   - When a process is executed, currprio returns to its original value.
   If there no one process with zero priority, the highest priority existent in the process table will be subtracted from all processes.
-  have your priority subtracted by the priority value of the first process 
   with the second more high priority.
   
