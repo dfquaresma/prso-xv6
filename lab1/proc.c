@@ -343,6 +343,7 @@ scheduler(void)
       switchuvm(p);
       p->state = RUNNING;
       p->usage = p->usage + 1;
+      p->currprio = p->prio;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
