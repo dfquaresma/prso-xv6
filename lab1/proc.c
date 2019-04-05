@@ -311,6 +311,21 @@ wait(void)
   }
 }
 
+void subtractcurrprio(int subtrahend) {
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    p->currprio = p->currprio - subtrahend;
+  }
+}
+
+void adjustallprios() {
+  int min = 0;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->currprio < min)
+      min = p->currprio
+  }
+  subtractcurrprio(min);
+}
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
