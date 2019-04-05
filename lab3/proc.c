@@ -312,6 +312,7 @@ wait(void)
 }
 
 void subtractcurrprio(int subtrahend) {
+  struct proc *p;
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     p->currprio = p->currprio - subtrahend;
     if (p->currprio < 0) p-> currprio = 0;
@@ -326,9 +327,10 @@ void updatecurrprio() {
 
 void adjustallprios() {
   int min = 0;
+  struct proc *p;
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if (p->currprio < min)
-      min = p->currprio
+      min = p->currprio;
   }
   subtractcurrprio(min);
 }
