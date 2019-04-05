@@ -560,7 +560,8 @@ setpriority(int pid, int prio)
     if(p->pid == pid){
         oldprio = p->prio;
         p->prio = prio;
-        p->currprio = prio;
+        if (p->currprio > prio)
+          p->currprio = prio;
         break;
     }
   }
