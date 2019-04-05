@@ -311,17 +311,17 @@ wait(void)
   }
 }
 
-void updatecurrprio() {
-    acquire(&ptable.lock);
-    subtractcurrprio(-1);
-    release(&ptable.lock);
-}
-
 void subtractcurrprio(int subtrahend) {
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     p->currprio = p->currprio - subtrahend;
     if (p->currprio < 0) p-> currprio = 0;
   }
+}
+
+void updatecurrprio() {
+    acquire(&ptable.lock);
+    subtractcurrprio(-1);
+    release(&ptable.lock);
 }
 
 void adjustallprios() {
