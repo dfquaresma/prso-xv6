@@ -51,7 +51,6 @@ struct proc {
   char name[16];               // Process name (debugging)
   int prio;                    // Process priority
   int usage;                   // Process usage counter
-  int currprio;                // Current process priority
 };
 
 // Process memory is laid out contiguously, low addresses first:

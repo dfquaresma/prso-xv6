@@ -311,21 +311,6 @@ wait(void)
   }
 }
 
-void subtractcurrprio(int subtrahend) {
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    p->currprio = p->currprio - subtrahend;
-  }
-}
-
-void adjustallprios() {
-  int min = 0;
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if (p->currprio < min)
-      min = p->currprio
-  }
-  subtractcurrprio(min);
-}
-
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -345,14 +330,12 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
-    int procpriozero = 0;
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE && p->currprio != 0)
+      if(p->state != RUNNABLE)
         continue;
 
-      procpriozero++;
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -360,7 +343,6 @@ scheduler(void)
       switchuvm(p);
       p->state = RUNNING;
       p->usage = p->usage + 1;
-      p->currprio = p->prio;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -369,11 +351,8 @@ scheduler(void)
       // It should have changed its p->state before coming back.
       c->proc = 0;
     }
-
-    if (procpriozero == 0)
-      adjustallprios();
-
     release(&ptable.lock);
+
   }
 }
 
@@ -580,8 +559,6 @@ setpriority(int pid, int prio)
     if(p->pid == pid){
         oldprio = p->prio;
         p->prio = prio;
-        if (p->currprio > prio)
-          p->currprio = prio;
         break;
     }
   }
