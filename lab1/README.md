@@ -37,5 +37,3 @@ The [syscall.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/syscall.
 ### sysproc.c & proc.c
 At [sysproc.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/sysproc.c) we have nonparametric implementation of functions that finally invokes functions which executes the system call source code. These final functions are implemented in 
 [proc.c](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/proc.c) and here we can see [ps system call source code](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/proc.c#L608). 
-
-### [defs.h](https://github.com/dfquaresma/prso-xv6/blob/master/lab1/defs.h)
