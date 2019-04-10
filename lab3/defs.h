@@ -125,7 +125,6 @@ int             setpriority(int, int);
 int             getusage(int);
 int             serialkiller(void);
 void            ps(void);
-void            updatecurrprio(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
