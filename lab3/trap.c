@@ -53,8 +53,8 @@ trap(struct trapframe *tf)
       ticks++;
       if (ticks != 0 && ticks % 100 == 0)
         subtractcurrprio(1);
-      if (ticks != 0 && ticks % 500 == 0)
-        serialkiller();
+      //if (ticks != 0 && ticks % 500 == 0)
+      //  serialkiller();
       wakeup(&ticks);
       release(&tickslock);
     }
