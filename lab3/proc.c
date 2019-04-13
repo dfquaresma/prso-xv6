@@ -318,6 +318,7 @@ void subtractcurrprio(int subtrahend) {
     p->currprio -= subtrahend;
     if (p->currprio < 0) p-> currprio = 0;
   }
+  //cprintf("CURRPRIO REDUCED BY %d!\n$ ", subtrahend);
   release(&ptable.lock);
 }
 
