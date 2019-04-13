@@ -135,7 +135,7 @@ static int (*syscalls[])(void) = {
 [SYS_getusage]     sys_getusage,
 [SYS_ps] sys_ps,
 };
-
+/*
 static char* syscallsnames[] = {
 [SYS_fork]    "fork",
 [SYS_exit]    "exit",
@@ -162,7 +162,7 @@ static char* syscallsnames[] = {
 [SYS_setpriority]  "setpriority",
 [SYS_getusage]     "getusage",
 [SYS_ps] "ps",
-};
+};*/
 
 void
 syscall(void)
@@ -176,10 +176,10 @@ syscall(void)
 
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {    
     curproc->tf->eax = syscallres;
-    if (num != SYS_write && num != SYS_read) {
+    /*if (num != SYS_write && num != SYS_read) {
       cprintf("syscall: %s\nexit code: %d\n",
             syscallsnames[num], syscallres);      
-    }    
+    }*/    
   } else {
     cprintf("%d %s: unknown sys call %d\n",
             curproc->pid, curproc->name, num);
