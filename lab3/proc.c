@@ -312,14 +312,15 @@ wait(void)
 }
 
 void subtractcurrprio(int subtrahend) {
-  struct proc *p;
-  acquire(&ptable.lock);
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    p->currprio -= subtrahend;
-    if (p->currprio < 0) p-> currprio = 0;
+  if (subtrahend != 0) {
+    struct proc *p;
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      p->currprio -= subtrahend;
+      if (p->currprio < 0) p-> currprio = 0;
+    }
+    release(&ptable.lock);
   }
-  //cprintf("CURRPRIO REDUCED BY %d!\n$ ", subtrahend);
-  release(&ptable.lock);
 }
 
 void adjustallprios() {
@@ -356,7 +357,7 @@ scheduler(void)
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)// && p->currprio != 0)
+      if(p->state != RUNNABLE || p->currprio != 0)
         continue;
 
       procpriozero++;
@@ -641,14 +642,16 @@ ps(void)
   struct proc *p;
   int count = 0;
   acquire(&ptable.lock);
+  cprintf("NUMBER    PID     PRIORITY    CURRPRIO    CPU_USAGE   MEM       NAME  \n");
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){   
     if (p->pid != 0) {            
       cprintf("%d         "               
       "%d       "           
+      "%d           "       
       "%d           " 
       " %d        "
       "  %dKB   "
-      "%s      \n", count++, p->pid, p->prio, p->usage, p->sz, p->name);
+      "%s      \n", count++, p->pid, p->prio, p->currprio, p->usage, p->sz, p->name);
     }
   }
   release(&ptable.lock); 
