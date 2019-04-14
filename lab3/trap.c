@@ -51,8 +51,13 @@ trap(struct trapframe *tf)
     if(cpuid() == 0) {
       acquire(&tickslock);
       ticks++;
-      if (ticks != 0 && ticks % 500 == 0)
-        serialkiller();
+      if (ticks != 0 && ticks % 100 == 0) {
+        acquire(&currprio.lock);
+        &currprio.value = (&currprio.value + 1) % 32;
+        release(&currprio.lock);
+      }
+      //if (ticks != 0 && ticks % 500 == 0)
+      //  serialkiller();
       wakeup(&ticks);
       release(&tickslock);
     }

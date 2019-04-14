@@ -12,6 +12,11 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
+struct {
+  struct spinlock lock;
+  int value;
+} currprio;
+
 static struct proc *initproc;
 
 int nextpid = 1;
@@ -311,6 +316,20 @@ wait(void)
   }
 }
 
+void adjustcurrprio() {
+  int min = 0;
+  struct proc *p;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->prio < min)
+      min = p->prio;
+  }
+  acquire(&currprio.lock);
+  currprio.value = min;
+  release(&currprio.lock);
+
+  release(&ptable.lock);
+}
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -325,17 +344,23 @@ scheduler(void)
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
-  
+
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
+    int procpriozero = 0;
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
+      acquire(&currprio.lock);
+      int currpriovalue = currprio.value;
+      release(&currprio.lock);
+
+      if(p->state != RUNNABLE || p->prio - currpriovalue > 0)
         continue;
 
+      procpriozero++;
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -351,7 +376,11 @@ scheduler(void)
       // It should have changed its p->state before coming back.
       c->proc = 0;
     }
-    release(&ptable.lock);
+
+    if (procpriozero == 0)
+      adjustcurrprio();
+    else
+      release(&ptable.lock);
 
   }
 }
@@ -566,11 +595,11 @@ setpriority(int pid, int prio)
   return oldprio;
 }
 
-int 
-getusage(int pid) 
+int
+getusage(int pid)
 {
   struct proc *p;
-  int ret = -1; 
+  int ret = -1;
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
@@ -589,7 +618,7 @@ serialkiller(void)
   int processid = -1;
   int killed = 0;
   acquire(&ptable.lock);
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){    
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if (p->killed != 1 && p->pid > 2) {
       processid = p->pid;
       release(&ptable.lock);
@@ -599,8 +628,8 @@ serialkiller(void)
     }
   }
 
-  if (!killed) release(&ptable.lock); 
-  
+  if (!killed) release(&ptable.lock);
+
   return processid;
 }
 
@@ -609,18 +638,29 @@ ps(void)
 {
   struct proc *p;
   int count = 0;
+
+  acquire(&currprio.lock);
+  int currpriovalue = currprio.value;
+  release(&currprio.lock);
+
   acquire(&ptable.lock);
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){   
-    if (p->pid != 0) {            
-      cprintf("%d         "               
-      "%d       "           
-      "%d           " 
+  cprintf("NUMBER    PID     PRIORITY    CURRPRIO    CPU_USAGE   MEM       NAME  \n");
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->pid != 0) {
+      int currpriocalculate = p->prio - currpriovalue;
+      if (currpriocalculate < 0)
+        currpriocalculate = 0;
+
+      cprintf("%d         "
+      "%d       "
+      "%d           "
+      "%d           "
       " %d        "
       "  %dKB   "
-      "%s      \n", count++, p->pid, p->prio, p->usage, p->sz, p->name);
+      "%s      \n", count++, p->pid, p->prio, currpriocalculate, p->usage, p->sz, p->name);
     }
   }
-  release(&ptable.lock); 
+  release(&ptable.lock);
   return;
 }
 
