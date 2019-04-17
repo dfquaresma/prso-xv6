@@ -311,6 +311,29 @@ wait(void)
   }
 }
 
+void subtractcurrprio(int subtrahend) {
+  if (subtrahend != 0) {
+    struct proc *p;
+    acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      p->currprio -= subtrahend;
+      if (p->currprio < 0) p-> currprio = 0;
+    }
+    release(&ptable.lock);
+  }
+}
+
+void adjustallprios() {
+  int min = 0;
+  struct proc *p;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->currprio < min)
+      min = p->currprio;
+  }
+  release(&ptable.lock);
+  subtractcurrprio(min);
+}
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -330,12 +353,14 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
+    int procpriozero = 0;
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
+      if(p->state != RUNNABLE || p->currprio != 0)
         continue;
 
+      procpriozero++;
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -343,6 +368,7 @@ scheduler(void)
       switchuvm(p);
       p->state = RUNNING;
       p->usage = p->usage + 1;
+      p->currprio = p->prio;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -351,7 +377,11 @@ scheduler(void)
       // It should have changed its p->state before coming back.
       c->proc = 0;
     }
-    release(&ptable.lock);
+    
+    if (procpriozero == 0)
+      adjustallprios();
+    else     
+      release(&ptable.lock);
 
   }
 }
@@ -559,6 +589,8 @@ setpriority(int pid, int prio)
     if(p->pid == pid){
         oldprio = p->prio;
         p->prio = prio;
+        if (p->currprio > prio)
+          p->currprio = prio;
         break;
     }
   }
@@ -610,14 +642,16 @@ ps(void)
   struct proc *p;
   int count = 0;
   acquire(&ptable.lock);
+  cprintf("NUMBER    PID     PRIORITY    CURRPRIO    CPU_USAGE   MEM       NAME  \n");
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){   
     if (p->pid != 0) {            
       cprintf("%d         "               
       "%d       "           
+      "%d           "       
       "%d           " 
       " %d        "
       "  %dKB   "
-      "%s      \n", count++, p->pid, p->prio, p->usage, p->sz, p->name);
+      "%s      \n", count++, p->pid, p->prio, p->currprio, p->usage, p->sz, p->name);
     }
   }
   release(&ptable.lock); 

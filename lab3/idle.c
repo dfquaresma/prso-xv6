@@ -4,6 +4,9 @@
 int
 main(int argc, char *argv[])
 {
-  ps();  
+  while (1) {
+    sleep(100);
+    printf(1, "IDLE!!!\n$ ");
+  }
   return exit();
 }
