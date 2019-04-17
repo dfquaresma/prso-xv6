@@ -51,8 +51,8 @@ trap(struct trapframe *tf)
     if(cpuid() == 0) {
       acquire(&tickslock);
       ticks++;
-      if (ticks != 0 && ticks % 100 == 0)
-        subtractcurrprio(1);
+      if (ticks % 10 == 0){
+        subtractcurrprio(1);}
       //if (ticks != 0 && ticks % 500 == 0)
       //  serialkiller();
       wakeup(&ticks);
