@@ -105,7 +105,7 @@ sys_setpriority(void)
   int pid, prio;
   argint(0, &pid);
   argint(1, &prio);
-  if(pid <= 0 && prio >= 0 && prio <=31)
+  if(pid <= 0 || prio < 0 || prio > 31)
     return -1;
   return setpriority(pid, prio);
 }
