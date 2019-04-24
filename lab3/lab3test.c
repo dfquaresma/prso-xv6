@@ -3,7 +3,7 @@
 
 int
 main(int argc, char *argv[])
-{   
+{
   int prio = atoi(argv[1]);
   int pid  = getpid();
 
@@ -15,5 +15,5 @@ main(int argc, char *argv[])
   }
 
   return exit();
-  
+
 }
