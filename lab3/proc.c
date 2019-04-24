@@ -642,19 +642,19 @@ ps(void)
   struct proc *p;
   int count = 0;
   acquire(&ptable.lock);
-  cprintf("NUMBER    PID     PRIORITY    CURRPRIO    CPU_USAGE   MEM       NAME  \n");
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){   
-    if (p->pid != 0) {            
-      cprintf("%d         "               
-      "%d       "           
-      "%d           "       
-      "%d           " 
-      " %d        "
-      "  %dKB   "
-      "%s      \n", count++, p->pid, p->prio, p->currprio, p->usage, p->sz, p->name);
+  cprintf("NUMBER\tPID\tPRIORITY\tCURRPRIO\tCPU_USAGE\tMEM\t\tNAME\n");
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if (p->pid != 0) {
+      cprintf(
+      "%d\t"
+      "%d\t"
+      "%d\t\t"
+      "%d\t\t"
+      "%d\t\t"
+      "%dKB\t\t"
+      "%s\n", count++, p->pid, p->prio, p->currprio, p->usage, p->sz, p->name);
     }
   }
   release(&ptable.lock); 
   return;
 }
-
